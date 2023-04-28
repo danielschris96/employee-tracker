@@ -17,5 +17,11 @@
   "bugs": {
     "url": "https://github.com/danielschris96/employee-tracker/issues"
   },
-  "homepage": "https://github.com/danielschris96/employee-tracker#readme"
+  "homepage": "https://github.com/danielschris96/employee-tracker#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "express": "^4.18.2",
+    "inquirer": "^9.2.0",
+    "mysql2": "^3.2.4"
+  }
 }
