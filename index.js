@@ -1,20 +1,20 @@
-const express = require('express');
-const mysql = require('mysql2');
 const inquirer = require('inquirer');
-const cTable = require('console.table');
+const { addDepartment } = require('./server.js');
 
-const PORT = process.env.PORT || 3001;
-const app = express();
-
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-
-
-
-
-
-
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-  
+inquirer
+    .prompt([
+        {
+            type: 'list',
+            name: 'action',
+            message: 'What would you like to do?',
+            choices: [
+                'View all departments',
+                'View all roles',
+                'View all employees',
+                'Add a department',
+                'Add a role',
+                'Add an employee',
+                'Update employee role'
+            ],
+        },
+    ]);
