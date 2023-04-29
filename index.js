@@ -1,5 +1,5 @@
 const inquirer = require('inquirer');
-const { addDepartment } = require('./server.js');
+const { viewDepartments, viewRoles, viewEmployees, addDepartment, addRole, addEmployee, updateRole } = require('./server.js');
 
 inquirer
     .prompt([
@@ -21,24 +21,27 @@ inquirer
     .then((answers) => {
         const { action } = answers;
         if (action === 'View all departments') {
-            console.log('View all departments');
+            viewDepartments();
         }
         else if (action === 'View all roles') {
-            console.log('View all roles');
+            viewRoles();
         }
         else if (action === 'View all employees') {
-            console.log('View all employees');
+            viewEmployees();
         }
         else if (action === 'Add a department') {
-            console.log('Add a department');
+            addDepartment();
         }
         else if (action === 'Add a role') {
-            console.log('Add a role');
+            addRole();
         }
         else if (action === 'Add an employee') {
-            console.log('Add an employee');
+            addEmployee();
         }
         else if (action === 'Update employee role') {
-            console.log('Update employee role');
-        };
+            updateRole();
+        }
+        else {
+            console.log('Invalid selection. Please try again.');
+        }
     });
