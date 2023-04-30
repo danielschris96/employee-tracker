@@ -14,10 +14,9 @@ const db = mysql.createConnection(
   {
     host: 'localhost',
     user: 'root',
-    password: 'password',
-    database: 'courses_db'
+    password: '',
+    database: 'business_db'
   },
-  console.log(`Connected to the courses_db database.`)
 );
 
 const query = util.promisify(db.query).bind(db);
@@ -63,7 +62,7 @@ function addDepartment() {
   ])
   .then((answers) => {
     const { name } = answers;
-    const sql = 'INSERT INTO departments (name) VALUES (?)';
+    const sql = 'INSERT INTO department (name) VALUES (?)';
     query(sql, [name])
       .then (() => {
         console.log (`Successfully added ${name} to department list`);
@@ -91,17 +90,15 @@ function addRole() {
       type: 'list',
       name: 'department',
       message: 'What department does this role belong to?',
-      choices: [
-        
-      ]
+      choices: results.map(result => result.name),
     }
   ])
   .then((answers) => {
-    const { title } = answers;
-    const sql = 'INSERT INTO role (title) VALUES (?)';
-    query(sql, [title])
+    const { title, salary, department } = answers;
+    const sql = 'INSERT INTO role (title, salary, department) VALUES (?, ?, ?)';
+    query(sql, [title, salary, department])
       .then (() => {
-        console.log (`Successfully added ${title} to department list`);
+        console.log (`Successfully updated the role table`);
       })
       .catch((err) => {
         console.log(err);
