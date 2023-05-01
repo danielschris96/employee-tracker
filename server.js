@@ -74,6 +74,10 @@ function addDepartment() {
 };
 
 function addRole() {
+  query('SELECT name FROM department')
+    .then((results) => {
+      const depNames = results.map
+    })
   inquirer
   .prompt([
     {
