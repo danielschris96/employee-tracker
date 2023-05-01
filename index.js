@@ -1,6 +1,7 @@
 const inquirer = require('inquirer');
 const { viewDepartments, viewRoles, viewEmployees, addDepartment, addRole, addEmployee, updateRole } = require('./server.js');
 
+function prompts()
 inquirer
     .prompt([
         {
@@ -45,3 +46,7 @@ inquirer
             console.log('Invalid selection. Please try again.');
         }
     });
+
+    prompts();
+
+    module.exports = { prompts };
