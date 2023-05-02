@@ -4,11 +4,11 @@ const cTable = require('console.table');
 const util = require('util');
 const inquirer = require('inquirer');
 
-const PORT = process.env.PORT || 3001;
-const app = express();
+// const PORT = process.env.PORT || 3001;
+// const app = express();
 
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+// app.use(express.urlencoded({ extended: false }));
+// app.use(express.json());
 
 const db = mysql.createConnection(
   {
@@ -21,10 +21,63 @@ const db = mysql.createConnection(
 
 const query = util.promisify(db.query).bind(db);
 
+function prompts() {
+  inquirer
+      .prompt([
+          {
+              type: 'list',
+              name: 'action',
+              message: 'What would you like to do?',
+              choices: [
+                  'View all departments',
+                  'View all roles',
+                  'View all employees',
+                  'Add a department',
+                  'Add a role',
+                  'Add an employee',
+                  'Update employee role',
+                  'Exit'
+              ],
+          },
+      ])
+      .then((answers) => {
+          const { action } = answers;
+          if (action === 'View all departments') {
+              viewDepartments();
+          }
+          else if (action === 'View all roles') {
+              viewRoles();
+          }
+          else if (action === 'View all employees') {
+              viewEmployees();
+          }
+          else if (action === 'Add a department') {
+              addDepartment();
+          }
+          else if (action === 'Add a role') {
+              addRole();
+          }
+          else if (action === 'Add an employee') {
+              addEmployee();
+          }
+          else if (action === 'Update employee role') {
+              updateRole();
+          }
+          else if (action === 'Exit') {
+            return;
+          }
+          else {
+              console.log('Invalid selection. Please try again.');
+          }
+      });
+  };
+
 function viewDepartments() {
   query('SELECT * FROM department')
   .then(rows => {
+    console.log();
     console.table(rows);
+    prompts();
   })
   .catch(err => {
     console.error(err);
@@ -34,7 +87,9 @@ function viewDepartments() {
 function viewRoles() {
   query('SELECT * FROM role')
   .then(rows => {
+    console.log();
     console.table(rows);
+    prompts();
   })
   .catch(err => {
     console.error(err);
@@ -44,7 +99,9 @@ function viewRoles() {
 function viewEmployees() {
   query('SELECT * FROM employee')
   .then(rows => {
+    console.log();
     console.table(rows);
+    prompts();
   })
   .catch(err => {
     console.error(err);
@@ -105,6 +162,7 @@ function addRole() {
         query(sql, [title, salary, departmentId])
           .then (() => {
             console.log (`Successfully updated the role table`);
+            prompts();
           })
           .catch((err) => {
             console.log(err);
@@ -168,6 +226,7 @@ function addEmployee() {
                     query(sql, [firstName, lastName, roleId, managerId])
                       .then(() => {
                         console.log('Successfully added employee to the database');
+                        prompts();
                       })
                       .catch((err) => {
                         console.log(err);
@@ -177,7 +236,6 @@ function addEmployee() {
           });
         });
     });
-    prompts();
 }
 
 
@@ -186,8 +244,9 @@ function updateRole() {
 }
 
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
+prompts();
+
+// app.listen(PORT, () => {
+//     console.log(`Server running on port ${PORT}`);
+//   });
   
-  module.exports = { viewDepartments, viewRoles, viewEmployees, addDepartment, addRole, addEmployee, updateRole };
